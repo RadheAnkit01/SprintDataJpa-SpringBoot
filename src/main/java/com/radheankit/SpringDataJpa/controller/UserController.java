@@ -24,4 +24,24 @@ public class UserController {
     public ResponseEntity<List<UserDto>> getUsers(){
         return ResponseEntity.status(HttpStatus.OK).body(userService.getUsers());
     }
+    @GetMapping("/{id}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long id){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.gerUserById(id));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+    @PatchMapping("/{id}")
+    public  ResponseEntity<UserDto> patchUser(@PathVariable Long id, @RequestBody CreateUserDto patchUserDto){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.patchUser(id, patchUserDto));
+    }
+
+    @PutMapping("/{id}")
+    public  ResponseEntity<UserDto> updateUser(@PathVariable Long id, @RequestBody CreateUserDto updateUserDto){
+        return ResponseEntity.status(HttpStatus.OK).body(userService.updateUser(id, updateUserDto));
+    }
+
+
 }
