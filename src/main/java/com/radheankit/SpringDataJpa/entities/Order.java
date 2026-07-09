@@ -1,5 +1,6 @@
 package com.radheankit.SpringDataJpa.entities;
 
+import com.radheankit.SpringDataJpa.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
