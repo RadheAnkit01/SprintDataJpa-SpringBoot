@@ -22,7 +22,7 @@ public class OrderController {
 //    }
 
     @PostMapping
-    public ResponseEntity<OrderDto> createOder(@PathVariable Long userId, @RequestBody CreateOrderDto createOrderDto){
+    public ResponseEntity<OrderDto> createOder( @PathVariable Long userId, @RequestBody CreateOrderDto createOrderDto){
         System.out.println("createOrder from orderController");
         return ResponseEntity.status(HttpStatus.CREATED).body(orderService.creatOrder(userId,createOrderDto));
     }

@@ -6,6 +6,7 @@ import com.radheankit.SpringDataJpa.dto.OrderDto;
 import com.radheankit.SpringDataJpa.dto.UserDto;
 import com.radheankit.SpringDataJpa.services.OrderService;
 import com.radheankit.SpringDataJpa.services.UserService;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
     @PostMapping
-    public ResponseEntity<UserDto> createUser(@RequestBody CreateUserDto createUserDto){
+    public ResponseEntity<UserDto> createUser(@Valid @RequestBody CreateUserDto createUserDto){
         return ResponseEntity.status(HttpStatus.CREATED).body(userService.saveUser(createUserDto));
     }
     @GetMapping
