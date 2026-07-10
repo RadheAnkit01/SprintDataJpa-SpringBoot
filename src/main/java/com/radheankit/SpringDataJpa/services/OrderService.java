@@ -5,6 +5,7 @@ import com.radheankit.SpringDataJpa.dto.OrderDto;
 import com.radheankit.SpringDataJpa.dto.UserDto;
 import com.radheankit.SpringDataJpa.entities.Order;
 import com.radheankit.SpringDataJpa.entities.User;
+import com.radheankit.SpringDataJpa.exception.UserNotFoundException;
 import com.radheankit.SpringDataJpa.repositories.OrderRepository;
 import com.radheankit.SpringDataJpa.repositories.UserRepository;
 import jakarta.transaction.Transactional;
@@ -22,7 +23,7 @@ public class OrderService {
 
     @Transactional
     public OrderDto creatOrder(Long userId, CreateOrderDto createOrderDto) {
-        User user = userRepository.findById(userId).orElseThrow();
+        User user = userRepository.findById(userId).orElseThrow(()-> new UserNotFoundException("User not found for the id : "+userId));
         Order order = new Order();
         order.setUser(user);
         order.setProductName(createOrderDto.getProductName());

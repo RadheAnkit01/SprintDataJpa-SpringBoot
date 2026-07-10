@@ -2,13 +2,16 @@ package com.radheankit.SpringDataJpa.services;
 
 
 import com.radheankit.SpringDataJpa.dto.CreateUserDto;
-import com.radheankit.SpringDataJpa.dto.OrderDto;
 import com.radheankit.SpringDataJpa.dto.UserDto;
-import com.radheankit.SpringDataJpa.entities.Order;
 import com.radheankit.SpringDataJpa.entities.User;
+import com.radheankit.SpringDataJpa.exception.UserNotFoundException;
 import com.radheankit.SpringDataJpa.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -38,7 +41,7 @@ public class UserService {
 
 
     public UserDto gerUserById(Long id) {
-        User user =  userRepository.findById(id).orElseThrow();
+        User user =  userRepository.findById(id).orElseThrow(()-> new UserNotFoundException("User not found with user id : " + id));
         return new UserDto(user.getId(),user.getName(), user.getEmail());
     }
 
@@ -71,4 +74,17 @@ public class UserService {
     }
 
 
+    public List<UserDto> getUsersPaginated(int page, int pageSize, String direction, String sortBy) {
+        Sort sort;
+        sort = direction.equalsIgnoreCase("asc")? Sort.by(sortBy).ascending():
+                Sort.by(sortBy).descending();
+
+        Pageable pageable =  PageRequest.of(page,pageSize,sort);
+        Page<User> userPage = userRepository.findAll(pageable);
+
+        List<UserDto> userDtoList = new ArrayList<>();
+        userPage.forEach(user -> userDtoList.add(new UserDto(user.getId(), user.getName(), user.getEmail())));
+
+        return userDtoList;
+    }
 }
