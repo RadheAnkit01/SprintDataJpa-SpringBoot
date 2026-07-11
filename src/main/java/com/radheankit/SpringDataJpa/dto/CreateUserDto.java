@@ -10,11 +10,15 @@ public class CreateUserDto {
     @NotNull
     @NotBlank
     @NotEmpty
-    @Size(max = 8)
+    @Size(min = 3, max = 50)
     private String name;
     @Email
     @NotNull
     @NotBlank
     @NotEmpty
     private String email;
+    @NotNull
+    @NotBlank
+    @NotEmpty
+    private String password;
 }
