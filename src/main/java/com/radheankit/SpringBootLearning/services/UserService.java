@@ -102,7 +102,6 @@ public class UserService {
         return new UserDto(user.getId(), user.getName(), user.getEmail());
     }
     public UserDto getCurrentUser() {
-        System.out.println("GetCurrentUser Called");
         User user = getLoggedInUser();
         System.out.println(user);
         return map(user);

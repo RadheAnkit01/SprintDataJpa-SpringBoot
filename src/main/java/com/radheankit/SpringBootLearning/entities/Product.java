@@ -7,22 +7,20 @@ import lombok.Setter;
 import java.math.BigDecimal;
 
 @Entity
-@Table(name = "orders")
+@Table(name = "products")
 @Getter
 @Setter
-public class Order {
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false) //fetch when required
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(nullable = false, unique = true, length = 200)
+    private String name;
 
     @Column(nullable = false, precision = 12, scale = 2)
-    private BigDecimal priceAtPurchase;
+    private BigDecimal price;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @Column(nullable = false)
+    private Boolean active;
 }

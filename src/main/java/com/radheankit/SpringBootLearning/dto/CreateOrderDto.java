@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 //@AllArgsConstructor
 public class CreateOrderDto {
-    private String productName;
+    private Long productId;
 }

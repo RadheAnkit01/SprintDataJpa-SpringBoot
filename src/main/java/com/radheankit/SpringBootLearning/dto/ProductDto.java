@@ -6,12 +6,12 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 
-@AllArgsConstructor
 @Getter
 @Setter
-public class OrderDto {
+@AllArgsConstructor
+public class ProductDto {
     private Long id;
-    private ProductDto product;
-    private UserDto user;
-    private BigDecimal priceAtPurchased;
+    private String name;
+    private BigDecimal price;
+    private Boolean active;
 }

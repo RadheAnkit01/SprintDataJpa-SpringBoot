@@ -1,5 +1,6 @@
 package com.radheankit.SpringBootLearning.security;
 
+import com.radheankit.SpringBootLearning.entities.Role;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,17 +27,23 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) ->
                         //Login & Register
                         auth.requestMatchers("/api/v1/auth/**").permitAll()
+
+                                //Products Admin
+                                .requestMatchers("/api/v1/products/admin/**").hasRole(Role.ADMIN.name())
+                                .requestMatchers(HttpMethod.GET, "/api/v1/products/**").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
+                                .requestMatchers("/api/v1/products/**").hasRole(Role.ADMIN.name())
+
                                 //User
-                                .requestMatchers("/api/v1/users/me").hasRole("USER")
+                                .requestMatchers("/api/v1/users/me").hasRole(Role.USER.name())
                                 //Admin
-                                .requestMatchers("/api/v1/users/**").hasRole("ADMIN")
+                                .requestMatchers("/api/v1/users/**").hasRole(Role.ADMIN.name())
                                 //Order User
-                                .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasRole("USER")
-                                .requestMatchers("/api/v1/users/my/**").hasRole("USER")
+                                .requestMatchers(HttpMethod.POST, "/api/v1/orders").hasRole(Role.USER.name())
+                                .requestMatchers("/api/v1/users/my/**").hasRole(Role.USER.name())
                                 //Order Admin
-                                .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasRole("ADMIN")
-                                .requestMatchers("/api/v1/orders/user/**").hasRole("ADMIN")
-                                .requestMatchers(HttpMethod.DELETE,"/api/v1/orders/**").hasRole("ADMIN")
+                                .requestMatchers(HttpMethod.GET, "/api/v1/orders").hasRole(Role.ADMIN.name())
+                                .requestMatchers("/api/v1/orders/user/**").hasRole(Role.ADMIN.name())
+                                .requestMatchers(HttpMethod.DELETE, "/api/v1/orders/**").hasRole(Role.ADMIN.name())
 
                                 .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

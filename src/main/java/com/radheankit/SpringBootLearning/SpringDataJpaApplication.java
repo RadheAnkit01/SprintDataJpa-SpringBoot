@@ -2,8 +2,10 @@ package com.radheankit.SpringBootLearning;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 @SpringBootApplication
+@EnableCaching
 public class SpringDataJpaApplication {
 
 	public static void main(String[] args) {
