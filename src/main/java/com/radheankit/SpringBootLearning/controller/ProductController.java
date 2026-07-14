@@ -21,6 +21,11 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.OK).body(productService.getAllActiveProducts());
     }
 
+    @GetMapping("/search")
+    ResponseEntity<List<ProductDto>> getSearchedProducts(@RequestParam String searchedItem){
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getSearchedProducts(searchedItem));
+    }
+
     //Admin - get all products
     @GetMapping("/admin")
     ResponseEntity<List<ProductDto>> getAllProducts(){

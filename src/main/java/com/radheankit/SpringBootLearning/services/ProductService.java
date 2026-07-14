@@ -7,6 +7,10 @@ import com.radheankit.SpringBootLearning.exception.ProductNotFoundException;
 import com.radheankit.SpringBootLearning.repositories.ProductRepositiry;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,6 +18,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class ProductService {
     private final ProductRepositiry productRepositiry;
 
@@ -28,6 +33,15 @@ public class ProductService {
         }
         return productDtos;
     }
+    public List<ProductDto> getSearchedProducts(String searchedItem) {
+        List<Product> products = productRepositiry.findByNameContainingIgnoreCase(searchedItem);
+        List<ProductDto> productDtos = new ArrayList<>();
+        for( Product product : products){
+            ProductDto productDto = new ProductDto(product.getId(),product.getName(),product.getPrice(),product.getActive());
+            productDtos.add(productDto);
+        }
+        return productDtos;
+    }
     public List<ProductDto> getAllProducts() {
         List<Product> products = productRepositiry.findAll();
         List<ProductDto> productDtos = new ArrayList<>();
@@ -37,8 +51,9 @@ public class ProductService {
         }
         return productDtos;
     }
-
+    @Cacheable(value = "products", key = "#id")
     public ProductDto getProductById(Long id) {
+        log.info("Getting product from Db for id : {}",id);
         Product product = productRepositiry.findById(id).orElseThrow(()-> new ProductNotFoundException("Product Not Found!"));
         return new ProductDto(product.getId(), product.getName(), product.getPrice(), product.getActive());
     }
@@ -52,6 +67,8 @@ public class ProductService {
         return new ProductDto(savedProduct.getId(), savedProduct.getName(), savedProduct.getPrice(),savedProduct.getActive());
     }
     @Transactional
+    @CachePut(value = "products", key = "#id") // update in database and cache both.
+//    @CacheEvict(value = "products", key = "#id") // update in database and removed previous value from cache.
     public ProductDto updateProduct(Long id, CreateProductDto createProductDto) {
         Product product = productRepositiry.findById(id).orElseThrow(()-> new ProductNotFoundException("Product Not Found!"));
 
@@ -71,4 +88,6 @@ public class ProductService {
         Product product = productRepositiry.findById(id).orElseThrow(()-> new ProductNotFoundException("Product not found"));
         product.setActive(false);
     }
+
+
 }
